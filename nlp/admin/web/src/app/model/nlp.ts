@@ -732,7 +732,8 @@ export class SearchQuery extends PaginatedQuery {
               public intentId?: string,
               public status?: SentenceStatus[],
               public entityType?: string,
-              public entityRole?: string,
+              public entityRoleToInclude: string[] = [],
+              public entityRoleToExclude: string[] = [],
               public modifiedAfter?: Date,
               public sort?: Entry<string, boolean>[]) {
     super(namespace, applicationName, language, start, size, searchMark, sort)

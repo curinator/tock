@@ -50,33 +50,12 @@ import fr.vsct.tock.shared.defaultLocale
 import fr.vsct.tock.shared.error
 import mu.KotlinLogging
 import org.litote.jackson.data.JacksonData
-import org.litote.kmongo.Data
-import org.litote.kmongo.Id
+import org.litote.kmongo.*
 import org.litote.kmongo.MongoOperator.elemMatch
 import org.litote.kmongo.MongoOperator.pull
-import org.litote.kmongo.`in`
-import org.litote.kmongo.and
-import org.litote.kmongo.combine
-import org.litote.kmongo.descendingSort
-import org.litote.kmongo.ensureIndex
-import org.litote.kmongo.ensureUniqueIndex
-import org.litote.kmongo.eq
-import org.litote.kmongo.find
-import org.litote.kmongo.getCollection
-import org.litote.kmongo.gt
-import org.litote.kmongo.inc
-import org.litote.kmongo.json
-import org.litote.kmongo.lte
-import org.litote.kmongo.ne
-import org.litote.kmongo.orderBy
-import org.litote.kmongo.pullByFilter
-import org.litote.kmongo.regex
-import org.litote.kmongo.replaceOneWithFilter
-import org.litote.kmongo.set
-import org.litote.kmongo.setTo
-import org.litote.kmongo.updateMany
 import java.time.Instant
 import java.util.Locale
+import kotlin.collections.toList
 
 
 /**
@@ -219,11 +198,12 @@ internal object ClassifiedSentenceMongoDAO : ClassifiedSentenceDAO {
                     if (intentId == null) null else Classification_.intentId eq intentId,
                     if (status.isNotEmpty()) Status `in` status else if (notStatus != null) Status ne notStatus else null,
                     if (entityType == null) null else Classification_.entities.type eq entityType,
-                    if (entityRole == null) null else Classification_.entities.role eq entityRole,
                     if (modifiedAfter == null)
                         if (searchMark == null) null else UpdateDate lte searchMark!!.date
                     else if (searchMark == null) UpdateDate gt modifiedAfter?.toInstant()
-                    else and(UpdateDate lte searchMark!!.date, UpdateDate gt modifiedAfter?.toInstant())
+                    else and(UpdateDate lte searchMark!!.date, UpdateDate gt modifiedAfter?.toInstant()),
+                    if(entityRoleToInclude.isEmpty()) null else Classification_.entities.role `in` entityRoleToInclude,
+                    if(entityRoleToExclude.isEmpty()) null else Classification_.entities.role `nin` entityRoleToExclude
                 )
 
             logger.debug { filterBase.json }

@@ -42,7 +42,8 @@ export class SearchComponent implements OnInit {
   filter: SentenceFilter = new SentenceFilter();
   status: SentenceStatus;
   entityTypes: EntityType[];
-  entityRoles: string[];
+  entityRolesToInlude: string[];
+  entityRolesToExclude: string[];
   selectedSentences: Sentence[];
   update: SentencesUpdate = new SentencesUpdate();
   targetLocale: string;
@@ -81,17 +82,20 @@ export class SearchComponent implements OnInit {
       .subscribe(entities => {
           if (!this.filter.intentId || this.filter.intentId === "-1") {
             this.entityTypes = entities;
-            this.entityRoles = getRoles(this.state.currentIntents.value, this.filter.entityType);
+            this.entityRolesToInlude = getRoles(this.state.currentIntents.value, this.filter.entityType);
+            this.entityRolesToExclude = getRoles(this.state.currentIntents.value, this.filter.entityType);
           } else {
             const intent = this.state.findIntentById(this.filter.intentId);
             if (intent) {
               this.entityTypes =
                 entities.filter(
                   e => intent.entities.some(intentEntity => intentEntity.entityTypeName === e.name));
-              this.entityRoles = getRoles([intent], this.filter.entityType);
+              this.entityRolesToInlude = getRoles([intent], this.filter.entityType);
+              this.entityRolesToExclude = getRoles([intent], this.filter.entityType);
             } else {
               this.entityTypes = [];
-              this.entityRoles = [];
+              this.entityRolesToInlude = [];
+              this.entityRolesToExclude = [];
             }
           }
         }
@@ -104,7 +108,7 @@ export class SearchComponent implements OnInit {
   }
 
   changeEntityType() {
-    this.filter.entityRole = "";
+   // this.filter.entityRole = "";
     this.search();
   }
 

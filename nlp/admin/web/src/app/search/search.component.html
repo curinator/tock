@@ -48,10 +48,17 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="search-criterion">
-          <mat-select *ngIf="entityRoles" placeholder="Entity Role" [(ngModel)]="filter.entityRole"
+          <mat-select *ngIf="entityRolesToInlude" multiple placeholder="Entity Role To Include" [(ngModel)]="filter.entityRoleToInclude"
                       (selectionChange)="search()">
-            <mat-option value="">All</mat-option>
-            <mat-option *ngFor="let r of entityRoles" [value]="r">
+            <mat-option *ngFor="let r of entityRolesToInlude" [value]="r">
+              {{r}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="search-criterion">
+          <mat-select *ngIf="entityRolesToExclude" multiple placeholder="Entity Role To Exclude" [(ngModel)]="filter.entityRoleToExclude"
+                      (selectionChange)="search()">
+            <mat-option *ngFor="let r of entityRolesToExclude" [value]="r">
               {{r}}
             </mat-option>
           </mat-select>

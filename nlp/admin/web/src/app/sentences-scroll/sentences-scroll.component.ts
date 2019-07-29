@@ -124,7 +124,8 @@ export class SentencesScrollComponent extends ScrollComponent<Sentence> implemen
       this.filter.intentId,
       this.filter.status,
       !this.filter.entityType || this.filter.entityType.length === 0 ? null : this.filter.entityType,
-      !this.filter.entityRole || this.filter.entityRole.length === 0 ? null : this.filter.entityRole,
+      !this.filter.entityRoleToInclude || this.filter.entityRoleToInclude.length === 0 ? [] : this.filter.entityRoleToInclude,
+      !this.filter.entityRoleToExclude || this.filter.entityRoleToExclude.length === 0 ? [] : this.filter.entityRoleToExclude,
       this.filter.modifiedAfter,
       this.tableView && this.sort.length !== 0
         ? this.sort.map(s => new Entry<string, boolean>(s.active, s.direction === 'asc'))
@@ -225,12 +226,13 @@ export class SentenceFilter {
               public intentId?: string,
               public status?: SentenceStatus[],
               public entityType?: string,
-              public entityRole?: string,
+              public entityRoleToInclude: string[] = [],
+              public entityRoleToExclude: string[] = [],
               public modifiedAfter?: Date) {
   }
 
   clone(): SentenceFilter {
-    return new SentenceFilter(this.search, this.intentId, this.status, this.entityType, this.entityRole, this.modifiedAfter);
+    return new SentenceFilter(this.search, this.intentId, this.status, this.entityType, this.entityRoleToInclude, this.entityRoleToInclude, this.modifiedAfter);
   }
 }
 

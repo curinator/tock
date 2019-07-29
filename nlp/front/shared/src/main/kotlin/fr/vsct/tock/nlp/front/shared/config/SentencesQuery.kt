@@ -34,7 +34,8 @@ data class SentencesQuery(
     val notStatus: ClassifiedSentenceStatus? = ClassifiedSentenceStatus.deleted,
     val onlyExactMatch: Boolean = false,
     val entityType: String? = null,
-    val entityRole: String? = null,
+    val entityRoleToInclude: List<String> = emptyList(),
+    val entityRoleToExclude: List<String> = emptyList(),
     val modifiedAfter: ZonedDateTime? = null,
     val searchMark: SearchMark? = null,
     /**

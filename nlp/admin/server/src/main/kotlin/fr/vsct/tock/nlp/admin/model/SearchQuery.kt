@@ -31,7 +31,8 @@ data class SearchQuery(
     val intentId: Id<IntentDefinition>?,
     val status: Set<ClassifiedSentenceStatus> = emptySet(),
     val entityType: String? = null,
-    val entityRole: String? = null,
+    val entityRoleToInclude: List<String> = emptyList(),
+    val entityRoleToExclude: List<String> = emptyList(),
     val modifiedAfter: ZonedDateTime? = null
 ) : PaginatedQuery() {
 
@@ -45,7 +46,8 @@ data class SearchQuery(
             intentId,
             status,
             entityType = entityType,
-            entityRole = entityRole,
+            entityRoleToInclude = entityRoleToInclude,
+            entityRoleToExclude = entityRoleToExclude,
             modifiedAfter = modifiedAfter,
             searchMark = searchMark,
             sort = sort ?: emptyList()
